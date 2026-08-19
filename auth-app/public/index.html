@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyApp Auth</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:0;background:#0c1116;color:#e6eef7}
+    .wrap{max-width:680px;margin:40px auto;padding:18px}
+    .card{background:#121922;border:1px solid #233043;border-radius:12px;padding:16px;margin-bottom:14px}
+    input{width:100%;padding:10px;border-radius:10px;border:1px solid #233043;background:#0f1620;color:#e6eef7;margin:6px 0}
+    button{padding:10px 14px;border-radius:10px;border:1px solid #233043;background:linear-gradient(90deg,#10b981,#06b6d4);color:#0c1116;cursor:pointer}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    pre{white-space:pre-wrap;background:#0f1620;border:1px solid #233043;padding:10px;border-radius:10px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>MyApp Auth</h1>
+    <div class="row">
+      <div class="card" style="flex:1 1 320px">
+        <h3>Register</h3>
+        <input id="r_name" placeholder="Name">
+        <input id="r_email" placeholder="Email">
+        <input id="r_password" type="password" placeholder="Password">
+        <button onclick="register()">Register</button>
+      </div>
+      <div class="card" style="flex:1 1 320px">
+        <h3>Login</h3>
+        <input id="l_email" placeholder="Email">
+        <input id="l_password" type="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Profile</h3>
+      <button onclick="fetchProfile()">Load Profile</button>
+      <pre id="profile"></pre>
+    </div>
+  </div>
+
+  <script>
+    async function register(){
+      const res = await fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+        name: document.getElementById('r_name').value.trim(),
+        email: document.getElementById('r_email').value.trim(),
+        password: document.getElementById('r_password').value
+      })});
+      alert(await res.text());
+    }
+    async function login(){
+      const res = await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+        email: document.getElementById('l_email').value.trim(),
+        password: document.getElementById('l_password').value
+      })});
+      const data = await res.json();
+      if(data.token){ localStorage.setItem('TOKEN', data.token); alert('Logged in'); } else { alert(JSON.stringify(data)); }
+    }
+    async function fetchProfile(){
+      const token = localStorage.getItem('TOKEN')||'';
+      const res = await fetch('/api/profile',{headers:{'Authorization':'Bearer '+token}});
+      document.getElementById('profile').textContent = await res.text();
+    }
+  </script>
+</body>
+</html>
+
+

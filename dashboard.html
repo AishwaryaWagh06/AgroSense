@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - AgroSense</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="assets/leaf.png">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt="AgroSense"/><span>AgroSense</span></a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="weather.html">Weather</a>
+      <a href="chatbot2.html">AI Assistant</a>
+      <a href="prediction.html">Prediction</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <main style="max-width:1100px;margin:0 auto;padding:18px;">
+    <h1>Field Dashboard</h1>
+    <p class="muted">View live soil telemetry and irrigation recommendations. Connect your ESP32/Arduino via Firebase/Thingspeak to stream data here.</p>
+
+    <section class="features" style="grid-template-columns:1fr 1fr 1fr;">
+      <article>
+        <h3>Soil Moisture</h3>
+        <div id="moistureVal" style="font-size:28px;font-weight:700">--%</div>
+        <div id="conditionVal" style="color:var(--muted)">--</div>
+      </article>
+      <article>
+        <h3>Threshold</h3>
+        <div id="thresholdVal" style="font-size:28px;font-weight:700">--%</div>
+        <div class="muted">Alert at threshold/high</div>
+      </article>
+      <article>
+        <h3>System Status</h3>
+        <div id="systemStatusVal" style="font-size:22px;font-weight:700">--</div>
+        <div class="muted" id="systemStatusNote"></div>
+      </article>
+    </section>
+
+    <section class="features" style="grid-template-columns:2fr 1fr;">
+      <article>
+        <h3>Soil Moisture (%)</h3>
+        <canvas id="moistureChart" height="180"></canvas>
+      </article>
+      <article>
+        <h3>Irrigation Recommendation</h3>
+        <div id="recommendation" style="font-size:14px;color:var(--muted)">Analyzing latest soil + weather...</div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn primary" id="simulateData">Simulate Live Data</button>
+          <button class="btn" id="connectFirebase">Connect Firebase</button>
+          <a class="btn ghost" href="chatbot.html">Open Assistant</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="features" style="margin-top:10px;grid-template-columns:1fr 1fr;">
+      <article>
+        <h3>Soil Temperature (°C)</h3>
+        <canvas id="tempChart" height="160"></canvas>
+      </article>
+      <article>
+        <h3>Last 24h Summary</h3>
+        <ul id="summary" style="margin:0;padding-left:18px;color:var(--muted)"></ul>
+      </article>
+    </section>
+
+    <section class="features" style="margin-top:10px;grid-template-columns:1fr 2fr;">
+      <article>
+        <h3>Recent Notifications</h3>
+        <ul id="recentNotifications" style="margin:0;padding-left:18px;color:var(--muted)"></ul>
+      </article>
+      <article>
+        <h3>All Notifications</h3>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap">
+          <input id="notifSearch" type="search" placeholder="Search farming news..." style="flex:1;min-width:220px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--panel);color:var(--text)" />
+          <button class="btn" id="notifRefresh">Refresh</button>
+        </div>
+        <ul id="allNotifications" style="margin:0;padding-left:18px;color:var(--muted)"></ul>
+      </article>
+    </section>
+
+    <section class="features" style="margin-top:10px;grid-template-columns:1fr;">
+      <article>
+        <h3>Firebase Data (All)</h3>
+        <pre id="firebaseAllData" style="margin:0;padding:12px;border:1px solid var(--border);border-radius:10px;background:var(--panel);color:var(--text);white-space:pre-wrap;max-height:260px;overflow:auto"></pre>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer"><p>© <span id="year"></span> AgroSense.</p></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="scripts/theme.js"></script>
+  <script src="scripts/auth.js"></script>
+  <script src="scripts/dashboard.js"></script>
+  <script src="scripts/notifications.js"></script>
+  <script src="scripts/firebase_live.js"></script>
+  <script>
+    // Guard page
+    if(window.Auth && !window.Auth.requireAuth()){};
+    // Mark panels for fade-in
+    document.querySelectorAll('.features article').forEach((el,i)=>{
+      el.classList.add('fade-in');
+      el.style.animationDelay = (i*120)+'ms';
+    });
+    // i18n demo on assistant link text
+    const a = document.querySelector('a.btn.ghost[href="/chatbot.html"], a.btn.ghost[href="chatbot.html"]');
+    if(a){ a.setAttribute('data-i18n','openAssistant'); if(localStorage.getItem('AS_LANG')==='hi') a.textContent='सहायक खोलें'; }
+  </script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
+

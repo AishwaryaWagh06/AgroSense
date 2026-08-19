@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - AgroSense</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="assets/leaf.png">
+  <style>
+    .auth-wrap{max-width:420px;margin:40px auto;padding:18px}
+    .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 6px 16px rgba(0,0,0,.25);transition:transform .2s ease, box-shadow .2s ease}
+    .card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.35)}
+    .field{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+    .field input{padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--panel);color:var(--text)}
+    .switch{display:flex;gap:8px;align-items:center;margin-top:10px;color:var(--muted)}
+    .fade-in{opacity:0;transform:translateY(8px);animation:fadeIn .6s ease forwards}
+    @keyframes fadeIn{to{opacity:1;transform:none}}
+  </style>
+  <script defer src="scripts/theme.js"></script>
+  <script defer src="scripts/auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>document.addEventListener('DOMContentLoaded',()=>{document.getElementById('year').textContent = new Date().getFullYear();});</script>
+  <script>
+    document.addEventListener('DOMContentLoaded',()=>{
+      const form = document.getElementById('authForm');
+      const modeToggle = document.getElementById('mode');
+      const title = document.getElementById('title');
+      const submitBtn = document.getElementById('submit');
+      const nameField = document.getElementById('nameField');
+      
+      modeToggle.addEventListener('change',()=>{
+        const isRegister = modeToggle.checked;
+        title.textContent = isRegister ? 'Create account' : 'Welcome back';
+        submitBtn.textContent = isRegister ? 'Register' : 'Login';
+        nameField.style.display = isRegister ? 'flex' : 'none';
+        document.getElementById('name').required = isRegister;
+      });
+      
+      form.addEventListener('submit',(e)=>{
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const name = document.getElementById('name').value.trim();
+        const isRegister = modeToggle.checked;
+        
+        if(isRegister){ 
+          window.Auth.register(email, password, name); 
+        } else { 
+          window.Auth.login(email, password); 
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt="AgroSense"/><span>AgroSense</span></a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="chatbot2.html">AI Assistant</a>
+    </nav>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+  <main class="auth-wrap">
+    <div class="card fade-in">
+      <h2 id="title" style="margin:0 0 6px">Welcome back</h2>
+      <p class="muted" style="margin:0 0 12px">Login or register to continue to your dashboard.</p>
+      <form id="authForm">
+        <div class="field" id="nameField" style="display: none;">
+          <label>Full Name</label>
+          <input id="name" placeholder="e.g., John Doe">
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input id="email" type="email" required placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input id="password" type="password" required placeholder="••••••••">
+        </div>
+        <div id="errorMessage" style="display:none;color:var(--error);background:var(--error-bg);padding:8px;border-radius:6px;margin:8px 0;font-size:14px;"></div>
+        <button class="btn primary" id="submit" type="submit" style="width:100%;margin-top:8px">Login</button>
+        <div class="switch">
+          <input type="checkbox" id="mode">
+          <label for="mode">Register new account</label>
+        </div>
+      </form>
+    </div>
+  </main>
+  <footer class="site-footer"><p>© <span id="year"></span> AgroSense.</p></footer>
+</body>
+</html>
+
+

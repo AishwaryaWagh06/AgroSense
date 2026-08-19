@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - AgroSense</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="assets/leaf.png">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt="AgroSense"/><span>AgroSense</span></a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="weather.html">Weather</a>
+      <a href="chatbot2.html">AI Assistant</a>
+      <a href="prediction.html">Prediction</a>
+      <a href="about.html" class="active">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <main style="max-width:1100px;margin:0 auto;padding:18px;">
+    <h1>How AgroSense Works</h1>
+    <section class="features" style="grid-template-columns:1fr 1fr;align-items:start;">
+      <article>
+        <h3>System Flow</h3>
+        <ol style="margin:0;padding-left:18px;color:var(--muted)">
+          <li>Data collection: soil moisture sensor + weather forecast.</li>
+          <li>Data transmission: ESP32/Arduino → Cloud (Firebase/Thingspeak/AWS IoT).</li>
+          <li>Processing: rule engine + AI reasoning for irrigation decisions.</li>
+          <li>Delivery: Web dashboard + Chatbot with detailed receipts.</li>
+        </ol>
+      </article>
+      <article>
+        <h3>Capabilities</h3>
+        <ul style="margin:0;padding-left:18px;color:var(--muted)">
+          <li>Irrigation timing and amount, weather-aware.</li>
+          <li>Fertilizer type, dose, and method with calculations.</li>
+          <li>Pest/disease Q&A with optional image analysis.</li>
+          <li>Multilingual responses and downloadable PDFs.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="features" style="grid-template-columns:1fr 1fr;">
+      <article>
+        <h3>Architecture & Pipeline</h3>
+        <p class="muted">Context assembly → Retrieval (RAG) → Reason + compute → Check & tag → Deliver. Transparent, auditable recommendations with confidence tags and citations when available.</p>
+      </article>
+      <article>
+        <h3>MVP Roadmap</h3>
+        <ul style="margin:0;padding-left:18px;color:var(--muted)">
+          <li>Weeks 1–4: Rule-based + small LLM prompts, embed 10 crop guides.</li>
+          <li>Weeks 5–10: Image classifier, soil test uploads, multilingual.</li>
+          <li>Validation: Field trials with extension experts and local calibration.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="promo">
+      <h2>Why it matters</h2>
+      <p>Over-irrigation wastes water; under-irrigation risks yield. AgroSense balances both, turning data into timely, actionable advice.</p>
+      <p class="muted">Slogans: Right water, right time. Science for every acre. Smarter fields. Stronger yields.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer"><p>© <span id="year"></span> AgroSense.</p></footer>
+  <script src="scripts/theme.js"></script>
+  <script src="scripts/auth.js"></script>
+  <script>
+    if(window.Auth && !window.Auth.requireAuth()){};
+  </script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
+

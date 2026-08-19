@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - AgroSense</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="assets/leaf.png">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt="AgroSense"/><span>AgroSense</span></a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="weather.html">Weather</a>
+      <a href="chatbot2.html">AI Assistant</a>
+      <a href="prediction.html">Prediction</a>
+      <a href="about.html">About</a>
+      <a href="contact.html" class="active">Contact</a>
+    </nav>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <main style="max-width:900px;margin:0 auto;padding:18px;">
+    <h1>Contact Us</h1>
+    <p class="muted">Questions, feedback, or partnership ideas? Send us a message and we’ll get back to you.</p>
+
+    <section class="features" style="grid-template-columns:1fr 1fr;align-items:start;">
+      <article>
+        <h3>Send a Message</h3>
+        <form id="contactForm" style="display:grid;gap:10px">
+          <input id="name" placeholder="Your name" required style="padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--panel);color:var(--text)">
+          <input id="email" type="email" placeholder="Email" required style="padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--panel);color:var(--text)">
+          <textarea id="message" rows="6" placeholder="How can we help?" required style="padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--panel);color:var(--text)"></textarea>
+          <button class="btn" type="submit">Send</button>
+          <small id="status" class="muted"></small>
+        </form>
+      </article>
+      <article>
+        <h3>Reach us</h3>
+        <p class="muted">Email: support@agrosense.example</p>
+        <p class="muted">Phone: +91-00000-00000</p>
+        <p class="muted">Address: 123 Farm Road, AgTech Park, Pune</p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer"><p>© <span id="year"></span> AgroSense.</p></footer>
+  <script src="scripts/theme.js"></script>
+  <script src="scripts/auth.js"></script>
+  <script>
+    if(window.Auth && !window.Auth.requireAuth()){};
+  </script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const form = document.getElementById('contactForm');
+    form?.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      document.getElementById('status').textContent = 'Thanks! Your message has been recorded.';
+      form.reset();
+    });
+  </script>
+</body>
+</html>
+

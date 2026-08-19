@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroSense - Smart Irrigation & Agronomy Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="assets/leaf.png">
+    <meta name="description" content="Smart irrigation, weather insights, and AI agronomy assistant for farmers.">
+    <script defer src="scripts/auth.js"></script>
+    <script>
+        // If not logged in, show only the login page
+        (function(){
+            try{
+                var session = JSON.parse(localStorage.getItem('AS_SESSION_V1')||'null');
+                if(!session){ window.location.replace('login.html'); }
+            }catch(e){ window.location.replace('login.html'); }
+        })();
+    </script>
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="index.html"><img src="assets/logo.svg" alt="AgroSense"/><span>AgroSense</span></a>
+        <nav class="nav">
+      <a href="index.html" class="active">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="weather.html">Weather</a>
+      <a href="chatbot2.html">AI Assistant</a>
+            <a href="prediction.html">Prediction</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>🌾 <span class="accent">Smart Crop Analysis</span> & Farm Insights 🚜</h1>
+                <p>Grow better with live soil moisture, weather-aware irrigation, and AI advice for seeds, nutrients, and pests. Healthy fields, higher yield. 🧑‍🌾</p>
+            <div class="hero-cta">
+                <a class="btn primary" href="prediction.html">Get Crop Recommendations</a>
+                <a class="btn secondary" href="chatbot.html">Ask AI Assistant</a>
+            </div>
+                <div class="feature-tags">
+                    <span>🌱 ML-Based Analysis</span>
+                    <span>💧 Soil & Weather Data</span>
+                    <span>📷 AI Image Recognition</span>
+                </div>
+            </div>
+            <div class="hero-visual" aria-hidden="true">
+                <canvas id="heroCanvas"></canvas>
+            </div>
+        </section>
+
+        <section class="key-features">
+            <h2 class="section-title">Core Capabilities</h2>
+            
+            <div class="features-grid">
+                <article class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                    </div>
+                    <h3>Crop Recommendation</h3>
+                    <p>ML-powered analysis of soil nutrients, pH, rainfall, and environmental factors to recommend optimal crops for your conditions.</p>
+                    <a href="prediction.html" class="feature-link">Try Prediction →</a>
+                </article>
+                
+                <article class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Image Analysis</h3>
+                    <p>Upload photos of your crops or fields for AI-powered identification and personalized recommendations based on visual assessment.</p>
+                    <a href="prediction.html#photo-analysis" class="feature-link">Analyze Images →</a>
+                </article>
+                
+                <article class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3>AI Consultation</h3>
+                    <p>Get expert advice from our AI assistant on irrigation, fertilizers, pest management, and crop-specific questions in real-time.</p>
+                    <a href="chatbot.html" class="feature-link">Chat with AI →</a>
+                </article>
+            </div>
+        </section>
+
+        <section class="workflow-section">
+            <div class="workflow-content">
+                <h2>How It Works</h2>
+                <ol class="workflow-steps">
+                    <li>
+                        <span class="step-number">1</span>
+                        <div class="step-content">
+                            <h3>Input Your Data</h3>
+                            <p>Enter soil parameters (N, P, K, pH) and environmental conditions (rainfall, temperature, humidity).</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="step-number">2</span>
+                        <div class="step-content">
+                            <h3>ML Analysis</h3>
+                            <p>Our machine learning model processes your data against our extensive crop database.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="step-number">3</span>
+                        <div class="step-content">
+                            <h3>Get Recommendations</h3>
+                            <p>Receive personalized crop recommendations and fertilizer guidance optimized for your conditions.</p>
+                        </div>
+                    </li>
+                </ol>
+                <a class="btn primary" href="prediction.html">Start Analysis Now</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>© <span id="year"></span> AgroSense. Built for resilient farming.</p>
+    </footer>
+
+    <script src="scripts/theme.js"></script>
+    <script src="scripts/hero-canvas.js"></script>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
+

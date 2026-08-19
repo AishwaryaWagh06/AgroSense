@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Assistant - AgroSense</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="assets/leaf.png">
+  <style>
+    /* Page-specific button colors */
+    #send.btn{background:linear-gradient(90deg,#16a34a,#22c55e);border:none;color:#0c1116}
+    #send.btn:hover{filter:brightness(1.05)}
+    #download.btn{background:#374151;border:1px solid var(--border);color:#e6eef7}
+    #download.btn:hover{background:#4b5563}
+    /* Mic button icon styling */
+    #mic.btn{background:transparent;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;padding:8px 10px}
+    #mic.btn svg{width:18px;height:18px;stroke:#e6eef7;fill:none}
+    #mic.btn:hover{background:rgba(255,255,255,.06)}
+    #mic.btn.listening{background:#ef4444;border-color:#ef4444}
+    #mic.btn.listening svg{stroke:#0c1116}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt="AgroSense"/><span>AgroSense</span></a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="weather.html">Weather</a>
+      <a href="chatbot2.html" class="active">AI Assistant</a>
+      <a href="prediction.html">Prediction</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </header>
+
+  <main style="max-width:1400px;margin:0 auto;padding:30px 24px;">
+    <div style="text-align:center;margin-bottom:30px;">
+      <h1 class="gradient-text">AI Assistant</h1>
+      <p class="muted" style="max-width:800px;margin:0 auto;font-size:1.1rem;">Get instant answers to your farming questions. Ask about crops, irrigation, pest management, and more. Upload images for visual diagnosis.</p>
+      <div class="title-decoration"></div>
+    </div>
+
+    <section class="chatbot-container">
+      <!-- Left sidebar for context and tools -->
+      <div class="chatbot-sidebar">
+        <div class="sidebar-section">
+          <h3>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:8px;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 8v4l3 3"></path>
+            </svg>
+            Recent Topics
+          </h3>
+          <div class="topic-list">
+            <div class="topic-item">Soil health analysis</div>
+            <div class="topic-item">Organic farming methods</div>
+            <div class="topic-item">Weather forecasting</div>
+            <div class="topic-item">Sustainable practices</div>
+          </div>
+        </div>
+        
+        <div class="sidebar-section">
+          <h3>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:8px;">
+              <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 16a1 1 0 1 1 1-1 1 1 0 0 1-1 1zm1-5a1 1 0 0 1-2 0V8a1 1 0 0 1 2 0z"></path>
+            </svg>
+            Tools
+          </h3>
+          <div class="tool-list">
+            <div class="tool-item">
+              <input type="file" id="image" accept="image/*" style="display:none;">
+              <label for="image" class="tool-button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                Upload Image
+              </label>
+            </div>
+            <div class="tool-item">
+              <button class="tool-button" id="download">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Download Receipt
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:8px;">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            Settings
+          </h3>
+          <div style="padding:10px;">
+            <label style="display:block;color:var(--muted);font-size:13px;margin-bottom:6px">Language</label>
+            <select id="lang" style="width:100%;padding:10px;border-radius:10px;background:var(--panel);color:var(--text);border:1px solid var(--border)">
+              <option value="en">English</option>
+              <option value="hi">Hindi</option>
+            </select>
+            
+            <label style="display:block;color:var(--muted);font-size:13px;margin:12px 0 6px">API Key</label>
+            <input id="aiKey" placeholder="Enter API key..." style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--panel);color:var(--text)">
+            <button class="btn" id="saveAI" style="margin-top:10px;width:100%;">Save Key</button>
+            <p class="muted" style="margin-top:8px;font-size:12px">Your key is stored locally in your browser.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Main chat area -->
+      <div class="chatbot-main">
+        <div id="chat" class="chat-messages"></div>
+        <div class="chat-input-container">
+          <input id="prompt" placeholder="Type your question... (e.g., When should I water my crops?)" class="chat-input">
+          <button class="chat-btn voice" id="mic" title="Voice input" aria-label="Voice input">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z" stroke-width="2"/>
+              <path d="M19 11a7 7 0 0 1-14 0" stroke-width="2"/>
+              <path d="M12 18v3" stroke-width="2"/>
+            </svg>
+          </button>
+          <button class="chat-btn send" id="send">Send</button>
+        </div>
+      </div>
+    </section>
+    
+    <style>
+      .gradient-text {
+        background: linear-gradient(135deg, var(--accent-2), var(--accent-3), var(--accent-4));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        font-size: 3.2rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        text-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+        margin-bottom: 20px;
+      }
+      
+      .title-decoration {
+        position: relative;
+        height: 4px;
+        width: 120px;
+        background: var(--accent-gradient-2);
+        margin: 25px auto 0;
+        border-radius: 2px;
+        box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+      }
+      
+      .chatbot-container {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 24px;
+        height: 70vh;
+        min-height: 600px;
+        margin-top: 20px;
+      }
+      
+      .chatbot-sidebar {
+        background: var(--panel);
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: var(--shadow);
+      }
+      
+      .sidebar-section {
+        border-bottom: 1px solid var(--border);
+      }
+      
+      .sidebar-section:last-child {
+        border-bottom: none;
+      }
+      
+      .sidebar-section h3 {
+        padding: 16px;
+        margin: 0;
+        font-size: 1.1rem;
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.03);
+      }
+      
+      .topic-list, .tool-list {
+        padding: 10px;
+      }
+      
+      .topic-item {
+        padding: 10px 14px;
+        border-radius: 8px;
+        margin-bottom: 6px;
+        cursor: pointer;
+        transition: all var(--transition-normal);
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      
+      .topic-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text);
+      }
+      
+      .tool-item {
+        margin-bottom: 8px;
+      }
+      
+      .tool-button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        color: var(--text);
+        cursor: pointer;
+        transition: all var(--transition-normal);
+        font-size: 0.95rem;
+      }
+      
+      .tool-button:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--accent-2);
+        transform: translateY(-2px);
+      }
+      
+      .chatbot-main {
+        display: flex;
+        flex-direction: column;
+        background: var(--panel);
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+      
+      .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      
+      .chat-input-container {
+        display: flex;
+        gap: 10px;
+        padding: 16px;
+        border-top: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.02);
+      }
+      
+      .chat-input {
+        flex: 1;
+        padding: 14px 18px;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: rgba(5, 11, 20, 0.6);
+        color: var(--text);
+        font-size: 1rem;
+        transition: all var(--transition-normal);
+      }
+      
+      .chat-input:focus {
+        border-color: var(--accent-2);
+        box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+      }
+      
+      .chat-btn {
+        border-radius: 14px;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: all var(--transition-normal);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .chat-btn.voice {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        padding: 10px 12px;
+      }
+      
+      .chat-btn.voice svg {
+        width: 20px;
+        height: 20px;
+        stroke: var(--text);
+      }
+      
+      .chat-btn.voice:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--accent-2);
+      }
+      
+      .chat-btn.voice.listening {
+        background: var(--error);
+        border-color: var(--error);
+      }
+      
+      .chat-btn.voice.listening svg {
+        stroke: #0c1116;
+      }
+      
+      .chat-btn.send {
+        background: var(--accent-gradient-2);
+        color: var(--bg);
+        font-weight: 600;
+        min-width: 100px;
+        box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
+      }
+      
+      .chat-btn.send:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 212, 255, 0.3);
+        filter: brightness(1.05);
+      }
+      
+      @media (max-width: 900px) {
+        .chatbot-container {
+          grid-template-columns: 1fr;
+          height: auto;
+        }
+        
+        .chatbot-sidebar {
+          display: none;
+        }
+        
+        .chat-messages {
+          height: 400px;
+        }
+      }
+    </style>
+  </main>
+
+  <footer class="site-footer"><p>© <span id="year"></span> AgroSense.</p></footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="scripts/theme.js"></script>
+  <script src="scripts/auth.js"></script>
+  <script src="scripts/chatbot2.js"></script>
+  <script>
+    if(window.Auth && !window.Auth.requireAuth()){};
+    document.getElementById('chat')?.classList.add('fade-in');
+  </script>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
+
